@@ -62,6 +62,7 @@ const ManageBookings = () => {
             <tr>
               <th className='p-3 font-medium'>Car</th>
               <th className='p-3 font-medium max-md:hidden'>Date Range</th>
+              <th className='p-3 font-medium max-md:hidden'>Reason</th>
               <th className='p-3 font-medium'>Total</th>
               <th className='p-3 font-medium max-md:hidden'>Payment</th>
               <th className='p-3 font-medium'>Actions</th>
@@ -80,7 +81,10 @@ const ManageBookings = () => {
                   <p className="font-medium max-md:hidden">{booking.car?.brand} {booking.car?.model}</p>
                 </td>
                 <td className="p-3 max-md:hidden">
-                  {booking.pickupDate?.split('T')[0]} to {booking.returnDate?.split('T')[0]}
+                  {booking.pickupdate?.split('T')[0]} to {booking.returndate?.split('T')[0]}
+                </td>
+                <td className="p-3 max-md:hidden text-gray-500 italic">  {/* ✅ add this */}
+                  {booking.reason || '—'}
                 </td>
                 <td className="p-3">{currency}{booking.price}</td>
                 <td className="p-3 max-md:hidden">

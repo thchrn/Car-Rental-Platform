@@ -6,9 +6,12 @@ import { useAppContext } from '../../context/AppContext'
 import toast from 'react-hot-toast'
 
 const Sidebar = () => {
-  const { user, axios, fetchUser } = useAppContext()
+  const { user, axios, fetchUser, setUser } = useAppContext()
   const location = useLocation()
   const [image, setImage] = useState(null)
+  const [phone, setPhone] = useState(user?.phone || '')
+  const [businessName, setBusinessName] = useState(user?.businessName || '')
+  const [editingProfile, setEditingProfile] = useState(false)
 
   const updateImage = async () => {
     try {
@@ -16,9 +19,24 @@ const Sidebar = () => {
       formData.append('image', image)
       const { data } = await axios.post('/api/owner/update-image', formData)
       if (data.success) {
-        await fetchUser()
+        setUser(prev => ({ ...prev, image: data.image }))
         toast.success(data.message)
         setImage(null)
+      } else {
+        toast.error(data.message)
+      }
+    } catch (error) {
+      toast.error(error.message)
+    }
+  }
+
+  const updateProfile = async () => {
+    try {
+      const { data } = await axios.post('/api/owner/update-profile', { phone, businessName })
+      if (data.success) {
+        setUser(prev => ({ ...prev, phone, businessName }))
+        toast.success(data.message)
+        setEditingProfile(false)
       } else {
         toast.error(data.message)
       }
@@ -42,7 +60,7 @@ const Sidebar = () => {
         className='group relative'>
         <label htmlFor='image'>
           <img
-            src={image ? URL.createObjectURL(image) : user?.image || assets.upload_icon}
+            src={image ? URL.createObjectObject(image) : user?.image || assets.upload_icon}
             alt=""
             className='h-9 md:h-14 w-9 md:w-14 rounded-full mx-auto object-cover'
           />
@@ -74,8 +92,40 @@ const Sidebar = () => {
         {user?.name}
       </motion.p>
 
+      {/* Phone & Business Name — desktop only */}
+      <div className='w-full px-4 mt-3 max-md:hidden space-y-2'>
+        {editingProfile ? (
+          <>
+            <input
+              type='text'
+              placeholder='Phone number'
+              value={phone}
+              onChange={e => setPhone(e.target.value)}
+              className='w-full border border-borderColor px-2 py-1.5 rounded-lg text-xs outline-none'
+            />
+            <input
+              type='text'
+              placeholder='Business name'
+              value={businessName}
+              onChange={e => setBusinessName(e.target.value)}
+              className='w-full border border-borderColor px-2 py-1.5 rounded-lg text-xs outline-none'
+            />
+            <div className='flex gap-2'>
+              <button onClick={updateProfile} className='flex-1 bg-primary text-white text-xs py-1.5 rounded-lg'>Save</button>
+              <button onClick={() => setEditingProfile(false)} className='flex-1 border border-borderColor text-xs py-1.5 rounded-lg'>Cancel</button>
+            </div>
+          </>
+        ) : (
+          <div className='text-xs text-gray-500 space-y-1'>
+            {user?.businessName && <p className='font-medium text-gray-700'>{user.businessName}</p>}
+            {user?.phone && <p>{user.phone}</p>}
+            <button onClick={() => setEditingProfile(true)} className='text-primary text-xs mt-1'>Edit Profile</button>
+          </div>
+        )}
+      </div>
+
       {/* Nav links */}
-      <div className='w-full'>
+      <div className='w-full mt-2'>
         {ownerMenuLinks.map((link, index) => (
           <motion.div
             key={index}

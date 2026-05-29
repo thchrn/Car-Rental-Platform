@@ -14,7 +14,8 @@ const checkAvailability = async (car, pickupdate, returndate) => {
 export const checkAvailabilityOfCar = async (req, res) => {
     try {
         const { location, pickupdate, returndate } = req.body
-        const cars = await Car.find({ location, isAvailable: true })
+        
+        const cars = await Car.find({ location, isAvailable: true }).populate('owner', 'businessName phone')
 
         const availablecarspromise = cars.map(async (car) => {
             const isAvailable = await checkAvailability(car._id, pickupdate, returndate)
@@ -35,7 +36,7 @@ export const checkAvailabilityOfCar = async (req, res) => {
 export const createBooking = async (req, res) => {
     try {
         const { _id } = req.user;
-        const { car, pickupdate, returndate } = req.body;
+        const { car, pickupdate, returndate, reason } = req.body;  // ✅ add reason
         const isAvailable = await checkAvailability(car, pickupdate, returndate)
         if (!isAvailable) {
             return res.json({ success: false, message: "Car is not available for booking" })  
@@ -47,9 +48,9 @@ export const createBooking = async (req, res) => {
         const noofdays = Math.ceil((returned - picked) / (1000 * 60 * 60 * 24));
         const price = carData.priceperday * noofdays;
 
-        await Booking.create({ car, owner: carData.owner, user: _id, pickupdate, returndate, price })
+        await Booking.create({ car, owner: carData.owner, user: _id, pickupdate, returndate, price, reason })  // ✅ add reason
         res.json({ success: true, message: "Booking created" })  
-    } catch (error) {
+    } catch (error) { 
         console.log(error.message)
         res.json({ success: false, message: error.message })  
     }

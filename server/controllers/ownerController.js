@@ -153,7 +153,7 @@ export const getdashboarddata = async (req, res) => {
 // API TO UPLOAD IMAGE
 export const uploadUserImage = async (req, res) => {
     try {
-        const { _id } = req.body
+        const { _id } = req.user 
         const imageFile = req.file;
 
         const fileBuffer = fs.readFileSync(imageFile.path)
@@ -174,7 +174,20 @@ export const uploadUserImage = async (req, res) => {
 
         const image = optimizedImageURL;
         await User.findByIdAndUpdate(_id, { image })
-        res.json({ success: true, message: "Image Updated" })
+        res.json({ success: true, message: "Image Updated", image }) 
+    } catch (error) {
+        console.log(error.message)
+        res.json({ success: false, message: error.message })
+    }
+}
+
+// ADD this new API at the bottom
+export const updateProfile = async (req, res) => {
+    try {
+        const { _id } = req.user
+        const { phone, businessName } = req.body
+        await User.findByIdAndUpdate(_id, { phone, businessName })
+        res.json({ success: true, message: "Profile Updated" })
     } catch (error) {
         console.log(error.message)
         res.json({ success: false, message: error.message })

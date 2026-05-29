@@ -5,10 +5,16 @@ import { motion } from 'framer-motion'
 
 const Hero = () => {
   const [pickupLocation, setPickupLocation] = useState('')
+  const [dateError, setDateError] = useState('')
   const { pickupdate, setpickupdate, returndate, setreturndate, navigate } = useAppContext()
 
   const handleSearch = (e) => {
     e.preventDefault()
+    if (returndate < pickupdate) {
+      setDateError('Return date must be after pickup date')
+      return
+    }
+    setDateError('')
     const params = new URLSearchParams({ pickupLocation, pickupdate, returndate })
     navigate(`/cars?${params.toString()}`)
   }
@@ -76,7 +82,10 @@ const Hero = () => {
           <label htmlFor='pickup-date' className='text-xs font-semibold text-gray-400 uppercase tracking-wide'>Pickup</label>
           <input
             value={pickupdate}
-            onChange={e => setpickupdate(e.target.value)}
+            onChange={e => {
+              setpickupdate(e.target.value)
+              setDateError('')
+            }}
             type="date"
             id="pickup-date"
             min={new Date().toISOString().split('T')[0]}
@@ -90,12 +99,18 @@ const Hero = () => {
           <label htmlFor='return-date' className='text-xs font-semibold text-gray-400 uppercase tracking-wide'>Return</label>
           <input
             value={returndate}
-            onChange={e => setreturndate(e.target.value)}
+            onChange={e => {
+              setreturndate(e.target.value)
+              setDateError('')
+            }}
             type="date"
             id="return-date"
-            className='text-sm font-medium text-gray-700 bg-transparent outline-none'
+            className={`text-sm font-medium bg-transparent outline-none ${dateError ? 'text-red-500' : 'text-gray-700'}`}
             required
           />
+          {dateError && (
+            <p className="text-red-500 text-xs mt-1 whitespace-nowrap">{dateError}</p>
+          )}
         </div>
 
         {/* Search button */}
