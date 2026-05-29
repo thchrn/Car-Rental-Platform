@@ -1,18 +1,20 @@
 # Caravio — Luxury Car Rental Platform
 
+ **Live Demo:** [https://caravio.vercel.app/](https://caravio.vercel.app/)
+
 Caravio is a full-stack car rental web application where users can browse premium vehicles, check availability, and book cars for specific dates. Car owners can list their vehicles, manage bookings, and track revenue through a dedicated dashboard.
 
 ---
 
 ## Features
 
-**For Users**
+### For Users
 - Browse and search available cars by brand, model, category, or transmission
 - Check car availability by location and date range
 - Book cars with pickup and return dates
 - View and manage personal bookings
 
-**For Owners**
+### For Owners
 - List cars with full specifications and images
 - Manage car availability (toggle on/off)
 - Approve, confirm, or cancel bookings
@@ -23,6 +25,7 @@ Caravio is a full-stack car rental web application where users can browse premiu
 ## Technologies Used
 
 ### Frontend
+
 | Technology | Purpose |
 |---|---|
 | React.js | UI framework |
@@ -34,6 +37,7 @@ Caravio is a full-stack car rental web application where users can browse premiu
 | Vite | Build tool and dev server |
 
 ### Backend
+
 | Technology | Purpose |
 |---|---|
 | Node.js | Runtime environment |
@@ -78,12 +82,11 @@ caravio/
 ## Getting Started
 
 ### Prerequisites
-Make sure you have these installed:
-- [Node.js](https://nodejs.org/) (v18 or above)
-- [MongoDB](https://www.mongodb.com/) (local or Atlas cloud)
-- [Git](https://git-scm.com/)
 
----
+Make sure you have these installed:
+- Node.js (v18 or above)
+- MongoDB (local or Atlas cloud)
+- Git
 
 ### 1. Clone the repository
 
@@ -118,8 +121,6 @@ npm run dev
 
 The backend runs on `http://localhost:5000`
 
----
-
 ### 3. Set up the Frontend
 
 ```bash
@@ -144,3 +145,6 @@ The frontend runs on `http://localhost:5173`
 
 ---
 
+## Deployment
+
+This app is deployed on **Vercel**: [https://caravio.vercel.app/](https://caravio.vercel.app/)
